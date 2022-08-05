@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [MainController::class, 'index'])->name('home');
+Route::get('contact', [MainController::class, 'contact'])->name('contact');
+Route::post('contact', [MainController::class, 'send_email'])->name('send.email');
+
+Route::middleware(['auth', 'verified'])->group(function(){
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+
+
+require __DIR__.'/auth.php';
